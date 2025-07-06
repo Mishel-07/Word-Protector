@@ -1,10 +1,22 @@
 import requests
 from telegram import Update
-from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filters
+from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filters, CommandHandler
 
 warn = {}
 
 TOKEN = ""
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("Add Me To Group", url=f"https://t.me/{context.bot.username}?startgroup=true")],
+        [InlineKeyboardButton("Source Code", url="https://github.com/Mishel-07/Word-Protector")]
+    ])
+    await update.message.reply_text(
+        "I'm a word protection bot.\n"
+        "I automatically delete unsafe messages and warn users.\n"
+        "Add me to a group and make me admin to get started.",
+        reply_markup=keyboard
+    )
 
 async def word_checker(update: Update, context: ContextTypes.DEFAULT_TYPE):
     m = update.message
@@ -38,6 +50,7 @@ async def word_checker(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 def main():
     application = ApplicationBuilder().token(TOKEN).build()
+    application.add_handler(CommandHandler("start", start))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, word_checker))
     print("Bot is running...")
     application.run_polling()
