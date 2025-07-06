@@ -1,5 +1,5 @@
 import requests
-from telegram import Update
+from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filters, CommandHandler
 
 warn = {}
@@ -30,23 +30,30 @@ async def word_checker(update: Update, context: ContextTypes.DEFAULT_TYPE):
     res = requests.get(f"https://api.mangoi.in/v1/words/{m.text.replace(' ', '+')}/accurate=80").json()
 
     if res.get("nosafe"):
-        await m.delete()      
-        warn[m.from_user.id]["warn"] += 1
-
-        await m.reply_text(
-            f"<b>Hey {m.from_user.mention_html()}</b>, you have been warned {warn[m.from_user.id]['warn']}/3 times.\n"
-            f"Please avoid sending inappropriate content like:\n<code>{res.get('content')}</code>\n"
-            f"If you reach 3 warnings, you will be banned.",
-            parse_mode="HTML"
-        )
-
-        if warn[m.from_user.id]["warn"] >= 3:
+        await m.delete()    
+        if not warn.get(m.from_user.id):
+        	warn[m.from_user.id] = 0
+        warn[m.from_user.id] += 1
+            
+        if warn[m.from_user.id] >= 3:
             del warn[m.from_user.id]
             await m.chat.ban_member(m.from_user.id)
-            await m.reply_text(
-                f"{m.from_user.mention_html()} has been banned for reaching 3 warnings.",
+            await context.bot.send_message(
+                chat_id=m.chat.id,
+                text=f"{m.from_user.mention_html()} has been banned for reaching 3 warnings.",
                 parse_mode="HTML"
             )
+            return
+        await context.bot.send_message(
+            chat_id=m.chat.id,
+            text=(
+                f"Dear {m.from_user.mention_html()},\n\n"
+                f"You have received a warning ({warn[m.from_user.id]}/3) for sharing inappropriate content.\n\n"
+                f"<b>Detected content:</b> <code>{res['content']}</code>\n\n"
+                f"Please refrain from sending such messages. Reaching 3 warnings will result in a ban."
+            ),
+            parse_mode="HTML"
+        )
 
 def main():
     application = ApplicationBuilder().token(TOKEN).build()
