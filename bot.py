@@ -18,9 +18,7 @@ async def word_checker(update: Update, context: ContextTypes.DEFAULT_TYPE):
     res = requests.get(f"https://api.mangoi.in/v1/words/{m.text.replace(' ', '+')}/accurate=80").json()
 
     if res.get("nosafe"):
-        await m.delete()
-
-        warn.setdefault(m.from_user.id, {"warn": 0})
+        await m.delete()      
         warn[m.from_user.id]["warn"] += 1
 
         await m.reply_text(
@@ -31,6 +29,7 @@ async def word_checker(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
         if warn[m.from_user.id]["warn"] >= 3:
+            del warn[m.from_user.id]
             await m.chat.ban_member(m.from_user.id)
             await m.reply_text(
                 f"{m.from_user.mention_html()} has been banned for reaching 3 warnings.",
