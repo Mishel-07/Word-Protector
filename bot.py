@@ -32,7 +32,7 @@ async def word_checker(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if res.get("nosafe"):
         await m.delete()    
         if not warn.get(m.from_user.id):
-        	warn[m.from_user.id] = 0
+            warn[m.from_user.id] = 0
         warn[m.from_user.id] += 1
             
         if warn[m.from_user.id] >= 3:
