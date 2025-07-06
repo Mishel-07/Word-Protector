@@ -1,6 +1,6 @@
 # Telegram Word Protector Bot
 
-A Telegram group moderation bot that automatically filters inappropriate or unsafe messages using the [MangoI API](https://api.mangoi.in). Users are warned when violations are detected, and after 3 warnings, the bot will ban them. Built using `python-telegram-bot v20+`.
+A Telegram group moderation bot that automatically filters inappropriate or unsafe messages using the [Mango API](https://api.mangoi.in). Users are warned when violations are detected, and after 3 warnings, the bot will ban them. Built using `python-telegram-bot v20+`.
 
 ---
 
@@ -30,9 +30,9 @@ cd Word-Protector
 pip install -r requirements.txt
 ```
 
-### Set Your Bot Token
+### 3. Set Your Bot Token
 
-Edit `bot.py` 
+Edit **line 7 of `bot.py`** and replace `TOKEN` with your bot token from [@BotFather](https://t.me/BotFather):
 
 ## License
 
