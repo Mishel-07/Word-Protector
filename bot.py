@@ -29,7 +29,7 @@ async def word_checker(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if member.status in ("administrator", "creator"):
         return
 
-    res = requests.get(f"https://api.mangoi.in/v1/words/{m.text.replace(' ', '+')}/accurate=80/{API_KEY}").json()
+    res = requests.get(f"https://api.mangoi.in/v1/words/{m.text.replace(' ', '+')}/accurate=80/api_key={API_KEY}").json()
 
     if res.get("nosafe"):
         await m.delete()    
