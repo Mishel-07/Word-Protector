@@ -6,6 +6,8 @@ warn = {}
 
 TOKEN = ""
 
+API_KEY = "" # hey dm @beesons in telegram for api key
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("Add Me To Group", url=f"https://t.me/{context.bot.username}?startgroup=true")],
@@ -27,7 +29,7 @@ async def word_checker(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if member.status in ("administrator", "creator"):
         return
 
-    res = requests.get(f"https://api.mangoi.in/v1/words/{m.text.replace(' ', '+')}/accurate=80").json()
+    res = requests.get(f"https://api.mangoi.in/v1/words/{m.text.replace(' ', '+')}/accurate=80/{API_KEY}").json()
 
     if res.get("nosafe"):
         await m.delete()    
