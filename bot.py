@@ -6,7 +6,7 @@ warn = {}
 
 TOKEN = ""
 
-API_KEY = "" # hey dm @beesons in telegram for api key
+API_KEY = "" # dm @beesons in telegram for api key free
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = InlineKeyboardMarkup([
